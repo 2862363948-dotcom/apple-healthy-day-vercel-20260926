@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>苹果的健康一天</title>
+    <style>
+      :root { --red:#e74646; --green:#53b175; --cream:#fff8ea; --ink:#17212b; --sky:#ddf3ff; --yellow:#ffd166; }
+      * { box-sizing: border-box; }
+      html, body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--cream); }
+      body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", sans-serif; }
+      #root { position:relative; width:100%; height:100%; background:var(--cream); overflow:hidden; }
+      .clip { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; }
+      .scene-bg { position:absolute; inset:0; background:var(--cream); }
+      .blob { position:absolute; border-radius:50%; opacity:.8; }
+      .blob-a { width:720px; height:720px; top:-170px; right:-210px; background:var(--sky); }
+      .blob-b { width:520px; height:520px; bottom:-150px; left:-210px; background:#ffe4bf; }
+      .eyebrow { position:absolute; top:110px; left:90px; color:var(--green); font-size:30px; font-weight:800; letter-spacing:5px; }
+      .headline { position:absolute; top:205px; left:90px; right:90px; color:var(--ink); font-size:92px; line-height:1.05; font-weight:900; letter-spacing:-3px; }
+      .copy { position:absolute; left:90px; right:90px; color:#53606c; font-size:35px; line-height:1.45; font-weight:600; }
+      .apple-wrap { position:absolute; left:50%; top:830px; width:420px; height:520px; margin-left:-210px; }
+      .apple { position:absolute; left:38px; top:80px; width:344px; height:330px; border-radius:48% 48% 46% 46% / 55% 55% 45% 45%; background:var(--red); box-shadow:inset -24px -20px 0 rgba(161,32,46,.15), 0 28px 0 rgba(231,70,70,.12); }
+      .apple:before, .apple:after { content:""; position:absolute; top:-30px; width:205px; height:190px; background:var(--red); border-radius:50%; }
+      .apple:before { left:10px; } .apple:after { right:10px; }
+      .leaf { position:absolute; z-index:2; left:210px; top:23px; width:120px; height:55px; border-radius:100% 0; background:var(--green); transform:rotate(-22deg); }
+      .stem { position:absolute; z-index:3; left:214px; top:1px; width:26px; height:75px; border-radius:20px; background:#805a3b; transform:rotate(20deg); }
+      .eye { position:absolute; z-index:5; top:190px; width:26px; height:38px; border-radius:50%; background:var(--ink); }
+      .eye-l { left:120px; } .eye-r { right:120px; }
+      .smile { position:absolute; z-index:5; left:145px; top:235px; width:55px; height:30px; border-bottom:8px solid var(--ink); border-radius:0 0 55px 55px; }
+      .cheek { position:absolute; z-index:5; top:230px; width:38px; height:20px; border-radius:50%; background:#ff9a8c; opacity:.8; }
+      .cheek-l { left:72px; } .cheek-r { right:72px; }
+      .arm { position:absolute; z-index:1; top:235px; width:110px; height:18px; border-radius:18px; background:var(--red); }
+      .arm-l { left:-40px; transform:rotate(18deg); } .arm-r { right:-40px; transform:rotate(-18deg); }
+      .leg { position:absolute; z-index:0; top:395px; width:22px; height:95px; border-radius:22px; background:var(--ink); }
+      .leg-l { left:135px; transform:rotate(9deg); } .leg-r { right:135px; transform:rotate(-9deg); }
+      .shoe { position:absolute; z-index:2; top:470px; width:86px; height:30px; border-radius:30px; background:var(--green); }
+      .shoe-l { left:95px; } .shoe-r { right:95px; }
+      .badge-row { position:absolute; top:1180px; left:90px; right:90px; display:flex; gap:18px; }
+      .badge { flex:1; padding:22px 10px; border-radius:24px; text-align:center; font-size:28px; font-weight:800; color:var(--ink); background:#fff; box-shadow:0 12px 0 rgba(23,33,43,.06); }
+      .badge strong { display:block; font-size:50px; margin-bottom:8px; }
+      .path { position:absolute; top:930px; left:90px; right:90px; height:12px; border-radius:12px; background:#c9edcf; }
+      .waypoint { position:absolute; top:894px; width:82px; height:82px; border-radius:50%; display:grid; place-items:center; background:#fff; color:var(--green); font-size:35px; font-weight:900; box-shadow:0 10px 0 rgba(23,33,43,.07); }
+      .waypoint.one { left:100px; } .waypoint.two { left:455px; } .waypoint.three { right:100px; }
+      .schedule { position:absolute; top:770px; left:90px; right:90px; display:grid; gap:20px; }
+      .card { display:flex; align-items:center; gap:25px; padding:30px; border-radius:30px; background:#fff; box-shadow:0 12px 0 rgba(23,33,43,.07); color:var(--ink); font-size:36px; font-weight:850; }
+      .card-icon { width:78px; height:78px; display:grid; place-items:center; border-radius:24px; background:#e8f6e9; font-size:42px; }
+      .stars { position:absolute; top:590px; left:50%; margin-left:-220px; width:440px; display:flex; justify-content:space-between; color:var(--yellow); font-size:54px; }
+      .final-line { position:absolute; top:1430px; left:90px; right:90px; color:var(--ink); font-size:54px; line-height:1.25; text-align:center; font-weight:900; }
+      .small-note { position:absolute; top:1690px; left:90px; right:90px; text-align:center; color:#71808c; font-size:28px; font-weight:650; }
+      .scene1 .apple-wrap { top:870px; }
+      .scene1 .copy { top:520px; }
+      .scene2 .apple-wrap { top:1040px; zoom:.72; }
+      .scene3 .apple-wrap { top:460px; zoom:.65; }
+      .scene4 .apple-wrap { top:1380px; zoom:.42; }
+      .scene5 .apple-wrap { top:760px; zoom:.82; }
+    </style>
+  </head>
+  <body>
+    <main id="root" data-composition-id="apple-healthy-day" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+      <section class="clip scene1" data-start="0" data-duration="6" data-track-index="0">
+        <div class="scene-bg"></div><div class="blob blob-a"></div><div class="blob blob-b"></div>
+        <div class="eyebrow">07:00  /  GOOD MORNING</div>
+        <div class="headline">早安！<br>我是你的<br>健康搭档。</div>
+        <div class="copy">一颗苹果，也可以开启一天的好状态。</div>
+        <div class="apple-wrap"><div class="stem"></div><div class="leaf"></div><div class="arm arm-l"></div><div class="arm arm-r"></div><div class="apple"><i class="eye eye-l"></i><i class="eye eye-r"></i><i class="smile"></i><i class="cheek cheek-l"></i><i class="cheek cheek-r"></i></div><div class="leg leg-l"></div><div class="leg leg-r"></div><div class="shoe shoe-l"></div><div class="shoe shoe-r"></div></div>
+      </section>
+      <section class="clip scene2" data-start="6" data-duration="6" data-track-index="1">
+        <div class="scene-bg"></div><div class="blob blob-a"></div><div class="eyebrow">ON THE GO  /  随时出发</div>
+        <div class="headline">背上小包，<br>一起出发。</div>
+        <div class="copy" style="top:520px">早餐后、通勤中、下午加餐，<br>我都能轻松加入。</div>
+        <div class="path"></div><div class="waypoint one">☀</div><div class="waypoint two">→</div><div class="waypoint three">✓</div>
+        <div class="apple-wrap"><div class="stem"></div><div class="leaf"></div><div class="arm arm-l"></div><div class="arm arm-r"></div><div class="apple"><i class="eye eye-l"></i><i class="eye eye-r"></i><i class="smile"></i><i class="cheek cheek-l"></i><i class="cheek cheek-r"></i></div><div class="leg leg-l"></div><div class="leg leg-r"></div><div class="shoe shoe-l"></div><div class="shoe shoe-r"></div></div>
+      </section>
+      <section class="clip scene3" data-start="12" data-duration="6" data-track-index="2">
+        <div class="scene-bg"></div><div class="blob blob-b"></div><div class="eyebrow">A LITTLE BOOST  /  轻轻补能</div>
+        <div class="headline">清甜一口，<br>状态上线。</div>
+        <div class="copy" style="top:560px">给忙碌一点能量，<br>给味蕾一点清爽。</div>
+        <div class="badge-row"><div class="badge"><strong>↗</strong>活力</div><div class="badge"><strong>◎</strong>专注</div><div class="badge"><strong>✦</strong>清爽</div></div>
+        <div class="apple-wrap"><div class="stem"></div><div class="leaf"></div><div class="arm arm-l"></div><div class="arm arm-r"></div><div class="apple"><i class="eye eye-l"></i><i class="eye eye-r"></i><i class="smile"></i><i class="cheek cheek-l"></i><i class="cheek cheek-r"></i></div><div class="leg leg-l"></div><div class="leg leg-r"></div><div class="shoe shoe-l"></div><div class="shoe shoe-r"></div></div>
+      </section>
+      <section class="clip scene4" data-start="18" data-duration="6" data-track-index="3">
+        <div class="scene-bg"></div><div class="blob blob-a"></div><div class="eyebrow">SMALL CHOICE  /  小小选择</div>
+        <div class="headline">健康，<br>不用一次满分。</div>
+        <div class="copy" style="top:500px">每天多做一个舒服的选择，<br>就已经很不错。</div>
+        <div class="schedule"><div class="card"><span class="card-icon">💧</span>喝水</div><div class="card"><span class="card-icon">↗</span>走动</div><div class="card"><span class="card-icon">●</span>均衡加餐</div></div>
+        <div class="apple-wrap"><div class="stem"></div><div class="leaf"></div><div class="arm arm-l"></div><div class="arm arm-r"></div><div class="apple"><i class="eye eye-l"></i><i class="eye eye-r"></i><i class="smile"></i><i class="cheek cheek-l"></i><i class="cheek cheek-r"></i></div><div class="leg leg-l"></div><div class="leg leg-r"></div><div class="shoe shoe-l"></div><div class="shoe shoe-r"></div></div>
+      </section>
+      <section class="clip scene5" data-start="24" data-duration="6" data-track-index="4">
+        <div class="scene-bg"></div><div class="blob blob-b"></div><div class="eyebrow">ONE DAY AT A TIME  /  一天一点点</div>
+        <div class="stars"><span>✦</span><span>✦</span><span>✦</span></div>
+        <div class="headline" style="top:250px; text-align:center">今天，<br>就从一颗苹果开始。</div>
+        <div class="apple-wrap"><div class="stem"></div><div class="leaf"></div><div class="arm arm-l"></div><div class="arm arm-r"></div><div class="apple"><i class="eye eye-l"></i><i class="eye eye-r"></i><i class="smile"></i><i class="cheek cheek-l"></i><i class="cheek cheek-r"></i></div><div class="leg leg-l"></div><div class="leg leg-r"></div><div class="shoe shoe-l"></div><div class="shoe shoe-r"></div></div>
+        <div class="final-line">健康的一天，<br>从一个简单选择开始。</div>
+        <div class="small-note">APPLE YOUR DAY 🍎</div>
+      </section>
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        const q = (sel) => document.querySelector(sel);
+        const scenes = [".scene1", ".scene2", ".scene3", ".scene4", ".scene5"];
+        scenes.forEach((s, i) => {
+          const start = i * 6;
+          tl.fromTo(`${s} .eyebrow`, { opacity: 0, y: -24 }, { opacity: 1, y: 0, duration: .45 }, start + .05);
+          tl.fromTo(`${s} .headline`, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: .7, ease: "power3.out" }, start + .18);
+          tl.fromTo(`${s} .copy`, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .55 }, start + .62);
+          tl.fromTo(`${s} .apple-wrap`, { opacity: 0, scale: .7, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: .8, ease: "back.out(1.5)" }, start + .9);
+          tl.fromTo(`${s} .apple`, { rotation: -6 }, { rotation: 6, duration: .55, yoyo: true, repeat: 3, ease: "sine.inOut" }, start + 1.8);
+          tl.fromTo(`${s} .badge, ${s} .card, ${s} .waypoint`, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5, stagger: .14 }, start + 1.25);
+          tl.fromTo(`${s} .stars`, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .6 }, start + 1.1);
+          if (i < 4) tl.to(`${s}`, { opacity: 0, duration: .35 }, start + 5.65);
+        });
+        window.__timelines = window.__timelines || {};
+        window.__timelines["apple-healthy-day"] = tl;
+      </script>
+    </main>
+  </body>
+</html>
